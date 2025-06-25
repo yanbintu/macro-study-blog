@@ -1,5 +1,5 @@
 ---
-title: "macro-study-blog"
+title: "Macro"
 listing:
   contents: posts
   sort: "date desc"
