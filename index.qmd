@@ -1,5 +1,5 @@
 ---
-title: "Macro"
+title: "Macro Self-Study"
 listing:
   contents: posts
   sort: "date desc"
