@@ -1,6 +1,6 @@
 ---
 title: "About"
-image: profile.jpg
+image: profile.png
 about:
   template: jolla
   links:
@@ -10,4 +10,4 @@ about:
 
 ---
 
-This is test information.
+本站内容由人工智障生成，请谨慎甄别。
