@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Macro Self-Study – MACRO</title>
+<title>Macro – MACRO</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -38,10 +38,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-236d90495073fb2ac8939117e3e83141.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-dfb324f25d9b1687192fa8be62ac8f9c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-4f6b8dc0065b0359b6fa52fd9b7e6c7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -99,8 +99,22 @@ ul.task-list li input[type="checkbox"] {
   })
   </script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -169,7 +183,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-page-left">
-      <h1 class="title">Macro Self-Study</h1>
+      <h1 class="title">Macro</h1>
                       </div>
   </div>
     
@@ -187,7 +201,7 @@ window.Quarto = {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div><div class="category" data-category="YW5hbHlzaXM=">analysis <span class="quarto-category-count">(1)</span></div><div class="category" data-category="Y29kZQ==">code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bmV3cw==">news <span class="quarto-category-count">(2)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(5)</span></div><div class="category" data-category="Y29kZQ==">code <span class="quarto-category-count">(1)</span></div><div class="category" data-category="bWFjcm8=">macro <span class="quarto-category-count">(5)</span></div><div class="category" data-category="dmlzdWFsaXphdGlvbg==">visualization <span class="quarto-category-count">(1)</span></div></div></div>
 <!-- main -->
 <main class="content quarto-banner-title-block column-page-left" id="quarto-document-content">
 
@@ -201,66 +215,156 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="bmV3cyUyQ2NvZGUlMkNhbmFseXNpcw==" data-listing-date-sort="1750780800000" data-listing-file-modified-sort="1750833057044" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="7">
-<div class="thumbnail"><a href="./posts/post-with-code/index.html" class="no-external">
+<div class="quarto-post image-right" data-index="0" data-categories="bWFjcm8=" data-listing-date-sort="1757260800000" data-listing-file-modified-sort="1757344239543" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="148">
+<div class="thumbnail"><a href="./posts/2025-09-08-lagrange-hamilton/index.html" class="no-external">
 
-<img loading="lazy" src="./posts/post-with-code/image.jpg" class="thumbnail-image">
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
 
 </a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
-<a href="./posts/post-with-code/index.html" class="no-external">Post With Code</a>
+<a href="./posts/2025-09-08-lagrange-hamilton/index.html" class="no-external">从 Lagrange 到 Hamiltonian</a>
 </h3>
 <div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bmV3cw=='); return false;">news</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('Y29kZQ=='); return false;">code</div>
-
-<div class="listing-category" onclick="window.quartoListingCategory('YW5hbHlzaXM='); return false;">analysis</div>
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm8='); return false;">macro</div>
 
 </div>
-<div class="delink listing-description"><a href="./posts/post-with-code/index.html" class="no-external">
-This is a post with executable code.
+<div class="delink listing-description"><a href="./posts/2025-09-08-lagrange-hamilton/index.html" class="no-external">
+相较于严格陈述 Pontryagin’s maximum…
 </a></div>
 </div>
 <div class="metadata">
-<a href="./posts/post-with-code/index.html" class="no-external">
+<a href="./posts/2025-09-08-lagrange-hamilton/index.html" class="no-external">
 <div class="listing-date">
-Jun 25, 2025
+Sep 8, 2025
 </div>
 <div class="listing-author">
-Harlow Malloc
+Tu
 </div>
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="bmV3cw==" data-listing-date-sort="1750521600000" data-listing-file-modified-sort="1750833057039" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="32">
-<div class="thumbnail"><a href="./posts/welcome/index.html" class="no-external">
+<div class="quarto-post image-right" data-index="1" data-categories="bWFjcm8lMkNjb2RlJTJDdmlzdWFsaXphdGlvbg==" data-listing-date-sort="1756915200000" data-listing-file-modified-sort="1757255366668" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1185">
+<div class="thumbnail"><a href="./posts/2025-09-04-phase-diagram/index.html" class="no-external">
 
-<p class="card-img-top"><img src="posts\welcome\thumbnail.jpg"  class="thumbnail-image card-img"/></p>
+<p class="card-img-top"><img src="posts\2025-09-04-phase-diagram\rck_quiver.png"  class="thumbnail-image card-img"/></p>
 
 </a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
-<a href="./posts/welcome/index.html" class="no-external">Welcome To My Blog</a>
+<a href="./posts/2025-09-04-phase-diagram/index.html" class="no-external">Phase Diagram</a>
 </h3>
 <div class="listing-categories">
 
-<div class="listing-category" onclick="window.quartoListingCategory('bmV3cw=='); return false;">news</div>
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm8='); return false;">macro</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('Y29kZQ=='); return false;">code</div>
+
+<div class="listing-category" onclick="window.quartoListingCategory('dmlzdWFsaXphdGlvbg=='); return false;">visualization</div>
 
 </div>
-<div class="delink listing-description"><a href="./posts/welcome/index.html" class="no-external">
-This is the first post in a Quarto blog. Welcome!
+<div class="delink listing-description"><a href="./posts/2025-09-04-phase-diagram/index.html" class="no-external">
+Phase diagram 是用来可视化系统随时间演化的绝佳手段，这里我们通过可视化经济学经典的RCK模型来说明…
 </a></div>
 </div>
 <div class="metadata">
-<a href="./posts/welcome/index.html" class="no-external">
+<a href="./posts/2025-09-04-phase-diagram/index.html" class="no-external">
 <div class="listing-date">
-Jun 22, 2025
+Sep 4, 2025
 </div>
 <div class="listing-author">
-Tristan O’Malley
+Tu
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="bWFjcm8=" data-listing-date-sort="1756483200000" data-listing-file-modified-sort="1757255233038" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="468">
+<div class="thumbnail"><a href="./posts/2025-08-30-nPg-ndl/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2025-08-30-nPg-ndl/index.html" class="no-external">No-Ponzi Game Condition and Natural Debt Limit</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm8='); return false;">macro</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/2025-08-30-nPg-ndl/index.html" class="no-external">
+庞氏骗局本质上描述的是通过借新债还旧债，并且只要还有人接盘，债务就会指数级越滚越大的模式。在无限期的动态经济学模型中，…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/2025-08-30-nPg-ndl/index.html" class="no-external">
+<div class="listing-date">
+Aug 30, 2025
+</div>
+<div class="listing-author">
+Tu
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="bWFjcm8=" data-listing-date-sort="1752076800000" data-listing-file-modified-sort="1757331154087" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="197">
+<div class="thumbnail"><a href="./posts/2025-07-10-bkc/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2025-07-10-bkc/index.html" class="no-external">Blanchard-Kahn Condition</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm8='); return false;">macro</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/2025-07-10-bkc/index.html" class="no-external">
+当假设了理性预期后，求解带期望的线性差分方程转变为一个纯粹的数学问题，这里的复杂度在于我们求解的目标不再是一个数列，而…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/2025-07-10-bkc/index.html" class="no-external">
+<div class="listing-date">
+Jul 10, 2025
+</div>
+<div class="listing-author">
+Tu
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="bWFjcm8=" data-listing-date-sort="1751126400000" data-listing-file-modified-sort="1756990229487" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="177">
+<div class="thumbnail"><a href="./posts/2025-06-29-re-df/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2025-06-29-re-df/index.html" class="no-external">理性预期和差分方程</a>
+</h3>
+<div class="listing-categories">
+
+<div class="listing-category" onclick="window.quartoListingCategory('bWFjcm8='); return false;">macro</div>
+
+</div>
+<div class="delink listing-description"><a href="./posts/2025-06-29-re-df/index.html" class="no-external">
+当我们想要描述一个系统随时间的演化，微分方程和差分方程便自然地出现了。对于经典的物理系统而言，给定一组描述系统的方程和…
+</a></div>
+</div>
+<div class="metadata">
+<a href="./posts/2025-06-29-re-df/index.html" class="no-external">
+<div class="listing-date">
+Jun 29, 2025
+</div>
+<div class="listing-author">
+Tu
 </div>
 </a>
 </div>

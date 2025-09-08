@@ -1,0 +1,66 @@
+---
+title: "从 Lagrange 到 Hamiltonian"
+author: "Tu"
+date: "2025-09-08"
+categories: [macro]
+---
+
+相较于严格陈述 Pontryagin's maximum principle，通过类比离散时间的最优化问题并建立与连续时间情形的联系有时候可以提供更好的直觉。
+
+我们以一个离散时间的消费储蓄问题为例，为简化起见，假设利率以及消费者的收入都是常数：
+
+$$
+\begin{align*}
+    &\max_{ \{c_t, a_{t+1}\}_{t=0}^{\infty} } \sum_{t=0}^{\infty} \beta^t u(c_t) \\[1ex]
+    &\text{s.t.} \quad c_t + a_{t+1} = (1 + r)a_t + y \enspace \forall t \ge 0, \\[1ex]
+    &\ a_0 \ \text{is given} ,\\
+    &\ \text{nPg:} \ \lim_{T \to \infty} \frac{a_{T+1}}{(1+r)^T} \ge 0
+\end{align*}
+$$ {#eq-01}
+
+此时，我们可以构造标准的 Lagrange 函数并通过求一阶条件得到欧拉方程：
+
+$$
+\mathcal{L} = \sum_{t=0}^{\infty} \beta^t u(c_t) + \sum_{t=0}^{\infty} \mu_t \left( (1+r)a_t + w - c_t - a_{t+1} \right)
+$$ {#eq-02}
+
+但我们舍近求远，定义 Hamiltonian 如下：
+
+$$
+\mathcal{H_t} \equiv \beta^t u(c_t) + \mu_t(ra_t + w - c_t)
+$$ {#eq-03}
+
+这时原 Lagrange [(1)](#eq-01) 可以改写为：
+
+$$
+\mathcal{L} = \sum_{t=0}^{\infty} \mathcal{H_t} + \sum_{t=0}^{\infty} \mu_t \left( a_t - a_{t+1} \right)
+$$ {#eq-04}
+
+此时对 $c_t$ 求导得：
+
+$$
+\frac{\partial \mathcal{H_t}}{\partial c_t} = 0
+$$ {#eq-05}
+
+对 $a_t$ 求导得：
+$$
+\frac{\partial \mathcal{H_t}}{\partial a_t} = -(\mu_t - \mu_{t-1})
+$$ {#eq-06}
+
+这里 $-(\mu_t - \mu_{t-1})$ 类比 $-\dot{\mu_t}$。
+
+对 $\mu_t$ 求导得：
+
+$$
+\frac{\partial \mathcal{H_t}}{\partial \mu_t} = a_{t+1} - a_{t}
+$$ {#eq-07}
+
+这里 $a_{t+1} - a_{t}$ 类比 $\dot{a_t}$。
+
+TVC:
+
+$$
+ \lim_{T \to \infty} \mu_Ta_{T+1} = 0
+$$ {#eq-08}
+
+注意到，我们已经得到了离散时间版本的 Pontryagin's maximum principle。

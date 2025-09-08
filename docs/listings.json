@@ -2,8 +2,11 @@
   {
     "listing": "/index.html",
     "items": [
-      "/posts/post-with-code/index.html",
-      "/posts/welcome/index.html"
+      "/posts/2025-09-08-lagrange-hamilton/index.html",
+      "/posts/2025-09-04-phase-diagram/index.html",
+      "/posts/2025-08-30-nPg-ndl/index.html",
+      "/posts/2025-07-10-bkc/index.html",
+      "/posts/2025-06-29-re-df/index.html"
     ]
   }
 ]

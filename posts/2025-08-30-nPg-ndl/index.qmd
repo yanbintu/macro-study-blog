@@ -1,0 +1,153 @@
+---
+title: "No-Ponzi Game Condition and Natural Debt Limit"
+author: "Tu"
+date: "2025-08-30"
+categories: [macro]
+---
+
+庞氏骗局本质上描述的是通过借新债还旧债，并且只要还有人接盘，债务就会指数级越滚越大的模式。在无限期的动态经济学模型中，我们经常会看到所谓 no-Ponzi game condition 的身影，它的出现一开始并不自然，并且乍一看似乎与我们现实世界所认识的庞氏骗局并无直接联系。但下面的分析表明 no-Ponzi game condition 事实上刚好排除了上述那种借新还旧、债务无限增长的情况。
+
+进一步地，no-Ponzi game condition 更为深刻的含义在于它是联系 sequential trading equilibrium 和 Arrow-Debreu equilibrium 的重要条件。此外，在总收入现值有限的情况下，no-Ponzi game condition 等价于一个在直觉上更为自然的条件：natural debt limit 。
+
+# 三期的消费储蓄问题
+
+我们从一个标准的三期消费储蓄问题出发，消费者最大化他的效用：
+
+$$
+\max_{\{c_t, a_{t+1}\}_{t=0}^2} u(c_0) + \beta u(c_1) + \beta^2 u(c_2),
+$$ {#eq-01}
+
+消费者每一期相应地面临如下的预算约束：
+
+$$
+\begin{align*}
+    c_0 + a_1 &= (1 + r_0)a_0 + y_0 \\
+    c_1 + a_2 &= (1 + r_1)a_1 + y_1 \\
+    c_2 + a_3 &= (1 + r_2)a_2 + y_2 \\
+\end{align*}
+$$ {#eq-02}
+
+通过简单的代数运算，消去 $a_1$、$a_2$，我们得到了消费者的一生预算约束：
+
+$$
+c_0 + \frac{c_1}{1 + r_1} + \frac{c_2}{(1 + r_1)(1 + r_2)} + \frac{a_3}{(1 + r_1)(1 + r_2)} \\[2ex]
+= (1 + r_0)a_0 + y_0 + \frac{y_1}{1 + r_1} + \frac{y_2}{(1 + r_1)(1 + r_2)}
+$$ {#eq-03}
+
+毫无疑问，[(2)](#eq-02)和[(3)](#eq-03)这两组约束条件在代数上是等价的，这并无任何奇特之处。但事实上，这两组约束条件可以分别代表两种不同的交易结构！
+
+[(2)](#eq-02)表达的是消费者在每一期都需要决定当期消费多少 $c_t$，并通过 $a_{t+1}$ 决定储蓄多少带到下一期。因此这样的交易结构要求每一期都开放金融市场，这个金融市场中只交易一种简单的金融产品，在 $t$ 期时购买1单位这样的证券会在 $t+1$ 期带来 $1+r_t$ 的回报。这样的交易结构实际上已经与我们现实中的交易方式比较接近了，以这样的交易结构定义的均衡称为 sequential trading equilibrium。
+
+[(3)](#eq-03)所内蕴的交易结构则与[(2)](#eq-02)完全不同，为了更清晰地看到这一点，让我们进行如下的定义：
+
+$$
+\begin{align*}
+    p_1 &= \frac{1}{1 + r_1} \\
+    p_2 &= \frac{1}{(1 + r_1)(1 + r_2)}
+\end{align*}
+$$ {#eq-04}
+
+此时，[(3)](#eq-03)被重写为：
+
+$$
+c_0 + p_1c_1 + p_2c_2 + p_2a_3 = (1 + r_0)a_0 + y_0 + p_1y_1 + p_2y_2
+$$ {#eq-05}
+
+这里 $p_t$ 表示的是以0期的消费品为计价物的 $t$ 期的消费品的价格，即1单位的 $t$ 期消费品可以交换  $p_t$ 单位的0期消费品。因此，上述的预算约束好像是在说，在整个经济的一开始，我们就将让所有的消费者面对面坐下来签订一个合同，通过议价的方式来交易不同时期的消费品，一旦合同敲定，后续将不再进行任何交易，而只按照一开始签好的合同进行执行。这里的关键是，我们将不同时期的消费品视作标准的、静态的一般均衡意义下的不同商品，这一概念还可以进一步推广到存在不确定性的经济，即将未来不同状态下的消费品视为可以进行交易的不同商品，这样的交易结构对应 Arrow-Debreu equilibrium。
+
+::: {.callout-tip appearance="default"}
+## Sequential trading equilibrium 和 Arrow-Debreu equilibrium 等价背后的隐含假设
+
+虽然在 sequential trading 的交易结构下消费者是在每一期进行消费和储蓄决策的，但不难发现为了实现一生的效用最大化，消费者必须在0期决策时就对未来的价格 $r_1$ 和 $r_2$ 有正确的预期，因此这里隐含地假设了理性预期，或者更合适的说法：消费者的预期是自我实现的。
+
+:::
+
+注意到，在我们不施加额外的约束时，上述的最优化问题不是良定义的。因为我们可以无限地增加债务（使得 $a_3$ 趋向负无穷）来使得目标函数无限增加。由于第三期就是世界末日，没有消费者愿意在这时作为借出方，因此一个合理的额外约束是 $a_3\ge0$ 。此时[(3)](#eq-03)变为：
+
+$$
+c_0 + \frac{c_1}{1 + r_1} + \frac{c_2}{(1 + r_1)(1 + r_2)} \le (1 + r_0)a_0 + y_0 + \frac{y_1}{1 + r_1} + \frac{y_2}{(1 + r_1)(1 + r_2)}
+$$ {#eq-06}
+
+这正是经典的消费者一生的总支出不能超过消费者一生的总收入。
+
+由于消费者的效用函数是关于消费的严格单调增函数，最优时 $a_3\ge0$ 一定会 binding，因此有时会看到一些教材会直接假设 $a_3=0$。
+
+# 无限期的消费储蓄问题
+
+现在考虑无限期的消费储蓄问题，消费者面对的是如下最优化问题：
+
+$$
+\begin{align*}
+    &\max_{ \{c_t, a_{t+1}\}_{t=0}^{\infty} } \sum_{t=0}^{\infty} \beta^t u(c_t) \\[1ex]
+    &\text{s.t.} \quad c_t + a_{t+1} = (1 + r_t)a_t + y_t \enspace \forall t \ge 0
+\end{align*}
+$$ {#eq-07}
+
+类似地，在不施加额外的约束时，上述优化问题不是良定义的，我们可以通过构造 Ponzi game 来使得消费达到任意大，具体构造如下：
+
+- 假设 $\{c_t^*, a_{t+1}^*\}_{t=0}^{\infty}$ 是最优解，令 $c'_0 = c_0^* + \epsilon$，$a'_1 = a_1^* - \epsilon$
+
+- 对所有 $t \ge 1$，令 $c'_t = c_t^*$，$a'_{t+1} = a_{t+1}^* - \prod_{s=1}^t (1+r_s)\epsilon$
+
+由此，我们通过借新还旧的把戏凭空增加了一笔消费，且由于这是一个无限游戏，我们可以将这个把戏永无止境地进行下去，代价是我们的债务会以指数级的速度增长。
+
+为了排除上述的情况，或者说为了使我们无限期的优化问题是良定义的，我们必须施加额外的约束。受到有限期问题的启发，一个自然的想法是我们需要 $\lim_{T \to \infty} a_{T+1} \ge 0$。事实上，这的确可以使得我们的问题变得良定义，但问题在于这一约束过于**强**了。想象你在一开始完全没有任何收入（$a_0=0$，$y_0=0$）,但在那之后每一期你都会获得固定的收入 $y_t = \bar{y} \enspace \forall t \ge 1$，因此在期初你不得不借入一笔钱来维持生存，事实上你可以在每一期都借入 $\frac{\bar{y}}{1+r}$（简化起见，假设利率是一常数），此时 $\lim_{T \to \infty} a_{T+1} = \frac{\bar{y}}{1+r} < 0$，而这样的借贷模式毫无疑问应当是被允许的，因为消费者未来的收入永远可以还的上他的债务，且他的债务也不会爆炸增长。
+
+为此，我们希望引入一个最**弱**的使得我们的优化问题变得良定义的条件 no-Ponzi game condition，这个条件应当长什么样？关键是我们允许消费者在无穷远处有负债，但这一负债不能指数级地增长，因此一个合理的形式是：
+
+$$
+\lim_{T \to \infty} \frac{a_{T+1}}{\prod_{t=1}^T (1 + r_t)} \ge 0
+$$ {#eq-08}
+
+可以验证，no-Ponzi game condition 的确排除了我们之前构造的 Ponzi game。
+
+事实上，与我们之前三期问题类似，这一不等式在最优时一定会 binding（Transversality condition），即 $a_t^*$ 满足：
+
+$$
+\lim_{T \to \infty} \frac{a_{T+1}^*}{\prod_{t=1}^T (1 + r_t)} = 0
+$$ {#eq-09}
+
+因此，任何你试图额外增加的债务 $\epsilon$ 最终都会导致 $\lim_{T \to \infty} \frac{a'_{T+1}}{\prod_{t=1}^T (1 + r_t)} < 0$。
+
+::: {.callout-tip appearance="default"}
+## No-Ponzi game condition 和 Transversality condition
+
+No-Ponzi game condition 和 Transversality condition 是在初学时极易混淆的两个条件。在我们当前的问题中，No-Ponzi game condition 是 $\lim_{T \to \infty} \frac{a_{T+1}}{\prod_{t=1}^T (1 + r_t)} \ge 0$，而 Transversality condition 是 $\lim_{T \to \infty} \frac{a_{T+1}^*}{\prod_{t=1}^T (1 + r_t)} = 0$，尽管只相差一个不等号，但它们的意义完全不同。No-Ponzi game condition 是为了使得我们的优化问题良定义所施加的额外约束，因此它是**假设**；Transversality condition 是在我们施加了上述假设后，这个优化问题的最优解应当满足的必要条件，因此它是**结果**。
+
+:::
+
+类似地，我们也可以从 sequential trading equilibrium 和 Arrow-Debreu equilibrium 的等价性中自然地得到 no-Ponzi game condition。
+
+通过迭代消费者每期的预算约束至 $T$ 期，得到：
+
+$$
+\sum_{t=0}^{T} \frac{c_t}{\prod_{s=1}^{t}(1+r_s)} + \frac{a_{T+1}}{\prod_{s=1}^{T}(1+r_s)} = (1+r_0)a_0 + \sum_{t=0}^{T} \frac{w_t}{\prod_{s=1}^{t}(1+r_s)}
+$$ {#eq-10}
+
+令 $T \to \infty$：
+
+$$
+\sum_{t=0}^{\infty} \frac{c_t}{\prod_{s=1}^{t}(1+r_s)} + \lim_{T \to \infty} \frac{a_{T+1}}{\prod_{t=1}^T (1 + r_t)} = (1+r_0)a_0 + \sum_{t=0}^{\infty} \frac{w_t}{\prod_{s=1}^{t}(1+r_s)}
+$$ {#eq-11}
+
+此时 $\lim_{T \to \infty} \frac{a_{T+1}}{\prod_{t=1}^T (1 + r_t)} \ge 0$ 等价于：
+
+$$
+\sum_{t=0}^{\infty} \frac{c_t}{\prod_{s=1}^{t}(1+r_s)} \le (1+r_0)a_0 + \sum_{t=0}^{\infty} \frac{w_t}{\prod_{s=1}^{t}(1+r_s)}
+$$ {#eq-11}
+
+再次，消费者一生的总支出不能超过消费者一生的总收入。
+
+# Natural Debt Limit
+
+虽然 No-Ponzi game condition 是一个单一的终点条件，但它实际上隐含地规定了消费者每一期的借贷上限：
+
+$$
+a_{t} \ge - \sum_{\tau=t}^{\infty} \frac{w_{\tau}}{\prod_{s=t}^{\tau}(1+r_s)}
+$$ {#eq-12}
+
+这一借贷的上限称为 natural debt limit。这个条件事实上非常符合直觉，它表明消费者在任意一期的借贷都不能超过他未来所有收入的现值，因为只要一旦超过，那么消费者即使未来完全不消费，他未来的收入也不足够偿还他的债务，除非他开始玩借新还旧的把戏。
+
+在收入现值 $\sum_{t=0}^{\infty} \frac{w_t}{\prod_{s=1}^{t}(1+r_s)}$ 是有限数的前提下，我们证明 natural debt limit 和 no-Ponzi game condition 等价。
+
+...
