@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.32">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Tu">
+<meta name="dcterms.date" content="2025-10-03">
+
+<title>Overview: Dynamic Optimization in Macro – MACRO</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-236d90495073fb2ac8939117e3e83141.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-4f6b8dc0065b0359b6fa52fd9b7e6c7f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.js"></script>
+  <script>document.addEventListener("DOMContentLoaded", function () {
+ var mathElements = document.getElementsByClassName("math");
+ var macros = [];
+ for (var i = 0; i < mathElements.length; i++) {
+  var texText = mathElements[i].firstChild;
+  if (mathElements[i].tagName == "SPAN") {
+   katex.render(texText.data, mathElements[i], {
+    displayMode: mathElements[i].classList.contains('display'),
+    throwOnError: false,
+    macros: macros,
+    fleqn: false
+   });
+}}});
+  </script>
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css">
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">MACRO</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Overview: Dynamic Optimization in Macro</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">macro</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Tu </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 3, 2025</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#lagrangianclassical" id="toc-lagrangianclassical" class="nav-link active" data-scroll-target="#lagrangianclassical"><span class="header-section-number">1</span> Lagrangian(classical)</a></li>
+  <li><a href="#bellman-equation" id="toc-bellman-equation" class="nav-link" data-scroll-target="#bellman-equation"><span class="header-section-number">2</span> Bellman equation</a></li>
+  <li><a href="#hamiltonian" id="toc-hamiltonian" class="nav-link" data-scroll-target="#hamiltonian"><span class="header-section-number">3</span> Hamiltonian</a></li>
+  <li><a href="#hjb-equation" id="toc-hjb-equation" class="nav-link" data-scroll-target="#hjb-equation"><span class="header-section-number">4</span> HJB equation</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<p><img src="moll-table-dynamic_optimization.png" class="img-fluid" style="width:90.0%"></p>
+<p><a href="https://benjaminmoll.com/wp-content/uploads/2019/07/Lecture2_ECO503.pdf">Moll(2014)</a> 一图流概况了宏观经济学中的动态优化方法。总结来说，离散时间下的 sequencial method: Lagrangian(classical) 最为直接和直观，即他是直接从全局考虑哪一个 sequence <span class="math inline">\{x_t\}_{t=0}^\infty</span> 能达到最优的目标，但是最优的 sequence <span class="math inline">\{x_t^*\}_{t=0}^\infty</span> 本身并不是完全没有规律的，事实上它在宏观经济中的典型优化问题中总能被一组递归的函数关系描述，因此求解整个 sequence 就等价于去求解那个递归函数关系，然后给定初始值 <span class="math inline">x_0</span>，我们就可以通过那个递归关系还原出整个序列。当然最优的 sequence 存在的递归结构继承自原始的那个优化问题本身的递归结构，这便是所谓 recursive way 的含义。直观来看，我们是将制定一个全局的最优行动计划（sequence）转变为制定一个在每个状态下对应的最优行动指南（policy function）。</p>
+<p>离散时间的形式更为符合直觉，连续时间具有更好的数学性质但理解起来也更为抽象。因此接下来我们会先从离散时间情形出发，再逐步过渡到连续时间情形，以更好看到比较抽象的 Hamiltonian 和 HJB equation 是如何与经典的 Lagrangian 和 Bellman equation 对应的。</p>
+<p>具体而言，我们通过宏观经济学中遇到的典型最优控制问题来说明上面表格中各种概念之间的联系。由于我们的目标是建立直观的联系，所以接下来的推导基本是 heuristic 的，很多技术细节被隐去，同时我们只考虑平稳的（时间 <span class="math inline">t</span> 不作为状态变量）、确定性的优化问题。最后为了符号上的展示方便，我们只考虑单变量情形（一个状态变量，一个控制变量），推广到多变量情形是自然的，基本只需要把偏导替换为梯度，乘积替换为内积。</p>
+<section id="lagrangianclassical" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Lagrangian(classical)</h1>
+<p>几乎所有离散时间下的平稳的确定性最优控制问题都可以写为下述的形式：</p>
+<p><span id="eq-01"><span class="math display">
+\begin{align*}
+    &amp;\max_{ \{x_{t+1}, y_{t}\}_{t=0}^{\infty} } \sum_{t=0}^{\infty} \beta^t u(x_t, y_t) \\[1ex]
+    \text{s.t.} \quad &amp;\ x_{t+1} = g(x_t, y_t)\enspace \forall t \ge 0 \\
+    &amp;\ x_{t} \in X, \enspace y_t \in Y \enspace \forall t \ge 0\\
+    &amp;\ x_0 \ \text{is given}
+\end{align*}
+\tag{1}</span></span></p>
+<p>求解这样一个最优化问题最直接的也就是要找到序列 <span class="math inline">\{x_{t+1}, y_{t}\}_{t=0}^{\infty}</span> 使得目标函数 <span class="math inline">\sum_{t=0}^{\infty} \beta^t u(x_t, y_t)</span> 最大，当然由于状态变量和控制变量通过 <span class="math inline">x_{t+1} = g(x_t,y_t)</span> 联系在一起，找到了最优控制变量序列 <span class="math inline">\{y_{t}\}_{t=0}^{\infty}</span> 也就找到了最优状态变量序列 <span class="math inline">\{x_{t+1}\}_{t=0}^{\infty}</span>，这也就是所谓最优控制的含义。</p>
+<p>在一系列正则条件的保证下，我们仍可以形式化地像有限期的最优化问题那样构建 Lagrangian：</p>
+<p><span id="eq-02"><span class="math display">
+\mathcal{L} = \sum_{t=0}^{\infty} \beta^t u(x_t, y_t) + \sum_{t=0}^{\infty} \lambda_t(g(x_t,y_t)-x_{t+1})
+\tag{2}</span></span></p>
+<p>求一阶条件<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>：</p>
+<p><span id="eq-03"><span class="math display">
+  x_{t+1}: \quad -\lambda_t + \beta^{t+1}u_x(x_{t+1},y_{t+1}) + \lambda_{t+1}g_x(x_{t+1},y_{t+1}) = 0
+\tag{3}</span></span></p>
+<p><span id="eq-04"><span class="math display">
+  y_{t}: \quad \beta^{t}u_y(x_{t},y_{t}) + \lambda_{t}g_y(x_{t},y_{t}) = 0
+\tag{4}</span></span></p>
+<p>消去 <span class="math inline">\lambda</span> 整理得到 Euler equation：</p>
+<p><span id="eq-05"><span class="math display">
+u_y(x_t, y_t) = \beta \left[ u_x(x_{t+1}, y_{t+1}) - \frac{u_y(x_{t+1}, y_{t+1})}{g_y(x_{t+1}, y_{t+1})} g_x(x_{t+1}, y_{t+1}) \right](-g_y(x_t, y_t))
+\tag{5}</span></span></p>
+<p>但仅有 Euler equation 不足以描述最优解，事实上我们还需要最后的一个额外条件：transversality conditon(TVC)：</p>
+<p><span id="eq-06"><span class="math display">
+\lim_{T \to \infty} \lambda_T x_{T+1} = 0
+\tag{6}</span></span></p>
+<p>但是为何还需要这样一个有些奇怪的 TVC ？一个不严格但 heuristic 的想法是考虑上述问题先是有限的 T 期问题，且增加一个终点约束 <span class="math inline">x_{T+1} \ge 0</span>，complementary slackness 要求在终点时有 <span class="math inline">\lambda_T x_{T+1} = 0</span>，令 <span class="math inline">T \to \infty</span> 即得 <a href="#eq-06">(6)</a>。</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+例1 新古典增长模型
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>考虑 social planner problem： <span class="math display">
+\begin{align*}
+    &amp;\max_{ \{k_{t+1}, c_{t}\}_{t=0}^{\infty} } \sum_{t=0}^{\infty} \beta^t u(c_t) \\[1ex]
+    \text{s.t.} \quad &amp;\ k_{t+1} = f(k_t) + (1 - \delta)k_t - c_t\enspace \forall t \ge 0 \\
+    &amp;\ k_{t} \in [0,\infty), \enspace y_t \in [0,\infty) \enspace \forall t \ge 0\\
+    &amp;\ k_0 \ \text{is given}
+\end{align*}
+</span></p>
+<p>此时 <span class="math inline">c_t</span> 对应 <span class="math inline">y_t</span>，<span class="math inline">k_t</span> 对应 <span class="math inline">x_t</span>。<span class="math inline">u_y(x_t, y_t) = u'(c_t)</span>，<span class="math inline">u_x(x_t, y_t) = 0</span>，<span class="math inline">g_x(x_t, y_t) = f'(k_t) + (1 - \delta)</span>，<span class="math inline">g_y(x_t, y_t) = -1</span>，整理 <a href="#eq-05">(5)</a> 得到 Euler equation：</p>
+<p><span class="math display">
+u'(c_t) = \beta(f'(k_{t+1}) + (1 - \delta))u'(c_{t+1})
+</span></p>
+<p>TVC: <span class="math display">
+\lim_{T \to \infty} \lambda_T k_{T+1} = 0
+</span></p>
+<p>同时注意到，<span class="math inline">\lambda_T = \beta^T u'(c_T)</span>，因此TVC又可以写为：</p>
+<p><span class="math display">
+\lim_{T \to \infty} \beta^T u'(c_T) k_{T+1} = 0
+</span></p>
+<p>再注意到利用 Euler equation，TVC还可以写为：</p>
+<p><span class="math display">
+\lim_{T \to \infty} \beta^T u'(c_T) (f'(k_{T+1}) + (1 - \delta)) k_{T+1} = 0
+</span></p>
+<p>由此看出TVC的表达式不是唯一的。</p>
+</div>
+</div>
+<p>总结例1，我们发现 classical 方法最终得到的对解的描述是一个差分方程组：</p>
+<p><span id="eq-07"><span class="math display">
+\begin{align*}
+     u'(c_t) &amp;= \beta(f'(k_{t+1}) + (1 - \delta))u'(c_{t+1}) \\
+     k_{t+1} &amp;= f(k_t) + (1 - \delta)k_t - c_t \\[1ex]
+    \text{with} \enspace k_0 \enspace &amp;\text{given}, \enspace \lim_{T \to \infty} \beta^T u'(c_T) k_{T+1} = 0
+\end{align*}
+\tag{7}</span></span></p>
+<p>即两变量的一阶差分方程组带有两个边界条件（一个初始条件和一个TVC）。事实上如果我们将控制变量用状态变量表示（<span class="math inline">c_t= f(k_t) + (1 - \delta)k_t - k_{t+1}</span>），我们得到：</p>
+<p><span id="eq-08"><span class="math display">
+\begin{align*}
+     u'(f(k_t) + (1 - \delta)k_t - k_{t+1}) &amp;= \beta(f'(k_{t+1}) + (1 - \delta))u'(f(k_{t+1}) + (1 - \delta)k_{t+1} - k_{t+2}) \\[1ex]
+    \text{with} \enspace k_0 \enspace \text{given}, \enspace &amp;\lim_{T \to \infty} \beta^T u'(f(k_T) + (1 - \delta)k_T - k_{T+1}) k_{T+1} = 0
+\end{align*}
+\tag{8}</span></span></p>
+<p>这是一个仅关于 <span class="math inline">k</span> 的二阶差分方程组，因此仍然需要两个边界条件。</p>
+<p>可以发现无论是哪种表示方式，我们最终得到的都是关于最优序列的一组等价描述，但即使上面这个很简单的例子要得到最终的解仍然没有那么容易，因为其中一个边界条件 TVC 在无穷远处，直接考虑这个 sequence 的问题似乎只能通过猜测控制变量的初始值，然后逐个验证是否会违反 TVC。</p>
+<p>接下来考虑的 recursive method，则带来了完全不一样的视角。</p>
+</section>
+<section id="bellman-equation" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Bellman equation</h1>
+<p>Recursive method，更常见的名字是 dynamic programming，其 key idea 其实非常简单，下面先通过一个三期的例子来说明这一点：</p>
+<p><span id="eq-09"><span class="math display">
+\begin{align*}
+    V_0(x_0) = &amp;\max_{\{x_{t+1}, y_{t}\}_{t=0}^{2}} u(x_0, y_0) + \beta u(x_1, y_1) + \beta^2 u(x_2, y_2) \\[1ex]
+    \text{s.t.} \quad &amp;\ x_{t+1} = g(x_t, y_t)\enspace \text{for} \enspace t = 0,1,2 \\
+    &amp;\ x_0 \ \text{is given}
+\end{align*}
+\tag{9}</span></span></p>
+<p>这里我们定义了值函数 <span class="math inline">V_0(x_0)</span>，即给定状态变量初始值 <span class="math inline">x_0</span> 优化问题所能取得的最大值。接下来我们正式递归地考虑这一优化问题：</p>
+<p><span id="eq-10"><span class="math display">
+\begin{align*}
+V_0(x_0) &amp; = \max_{\substack{ \{x_{t+1}, y_{t}\}_{t=0}^{2} \text{ s.t.} \\  x_{t+1} = g(x_t, y_t) \ \text{for} \ t = 0,1,2 \\ x_0 \text{ given} }}  
+u(x_0, y_0) + \beta u(x_1, y_1) + \beta^2 u(x_2, y_2)
+\\
+&amp; = \max_{\substack{ \{x_{1}, y_{0}\} \text{ s.t.} \\  x_{1} = g(x_0, y_0) \\ x_0 \text{ given} }}
+u(x_0, y_0) +
+\beta \left\{ \max_{\substack{ \{x_{t+1}, y_{t}\}_{t=1}^{2} \text{ s.t.} \\  x_{t+1} = g(x_t, y_t) \ \text{for} \ t = 1,2 \\ x_1 \text{ given} }}
+u(x_1, y_1) + \beta u(x_2, y_2) \right\}
+\\
+&amp; = \max_{\substack{ \{x_{1}, y_{0}\} \text{ s.t.} \\  x_{1} = g(x_0, y_0) \\ x_0 \text{ given} }}
+u(x_0, y_0) +
+\beta \left\{ \max_{\substack{ \{x_{2}, y_{1}\} \text{ s.t.} \\ x_{2} = g(x_1, y_1) \\ x_1 \text{ given} }}
+u(x_1, y_1) +
+\beta \left\{ \max_{\substack{ \{x_{3}, y_{2}\} \text{ s.t.} \\ x_{3} = g(x_2, y_2) \\ x_2 \text{ given} }} u(x_2, y_2)
+\right\} \right\}
+\\
+&amp; = \max_{\substack{ \{x_{1}, y_{0}\} \text{ s.t.} \\  x_{1} = g(x_0, y_0) \\ x_0 \text{ given} }}
+u(x_0, y_0) +
+\beta \left\{ \max_{\substack{ \{x_{2}, y_{1}\} \text{ s.t.} \\ x_{2} = g(x_1, y_1) \\ x_1 \text{ given} }}
+u(x_1, y_1) +
+\beta V_2(x_2) \right\}
+\\
+&amp; = \max_{\substack{ \{x_{1}, y_{0}\} \text{ s.t.} \\  x_{1} = g(x_0, y_0) \\ x_0 \text{ given} }}
+u(x_0, y_0) + \beta V_1(x_1)
+\end{align*}
+\tag{10}</span></span></p>
+<p>上面的推导过程完整地展示了我们如何将一个全局的最优化问题递归地分解为分步优化问题，并如何从最后一期开始倒向地逐步求解整个优化问题。在每一阶段的优化问题，我们都会得到一个行动指南：<span class="math inline">y_t = h_t(x_t)</span>，称为 policy function，它指示了我们如何根据当前的时间 <span class="math inline">t</span> 以及状态 <span class="math inline">x_t</span> 展开最优行动，因此与 sequence 方法直接得到的是一组序列不同，recursive 的方法得到的是一组函数，根据这组函数，我们再从第 0 期出发，就可以还原出最优的序列。</p>
+<p>最后值得额外说明的是，鉴于时间的特殊地位，我们依照惯例将时间 <span class="math inline">t</span> 记作下标，但 <span class="math inline">V_t(x_t)</span> 和 <span class="math inline">h_t(x_t)</span> 实际上是 <span class="math inline">V(t,x_t)</span> 和 <span class="math inline">h(t,x_t)</span>，即时间 <span class="math inline">t</span> 在这里实际是一个状态变量，即该优化问题是非平稳的。接下来我们将看到推广到无限期会将我们的问题变为平稳的，这也是为什么我们会偏爱一个看起来更难处理的无限期的技术原因。</p>
+<p>我们将典型的离散时间最优控制问题重写在下面：</p>
+<p><span id="eq-11"><span class="math display">
+\begin{align*}
+    V(x_0) = &amp;\max_{ \{x_{t+1}, y_{t}\}_{t=0}^{\infty} } \sum_{t=0}^{\infty} \beta^t u(x_t, y_t) \\[1ex]
+    \text{s.t.} \quad &amp;\ x_{t+1} = g(x_t, y_t)\enspace \forall t \ge 0 \\
+    &amp;\ x_{t} \in X, \enspace y_t \in Y \enspace \forall t \ge 0\\
+    &amp;\ x_0 \ \text{is given}
+\end{align*}
+\tag{11}</span></span></p>
+<p>在一系列正则条件的保证下，我们可以形式化地像有限期那样将上式写为：</p>
+<p><span id="eq-12"><span class="math display">
+\begin{align*}
+V(x_0) &amp; = \max_{\substack{ \{x_{t+1}, y_{t}\}_{t=0}^{\infty} \text{ s.t.} \\  x_{t+1} = g(x_t, y_t) \ \forall t \ge 0 \\ x_0 \text{ given} }}  
+\sum_{t=0}^{\infty} \beta^t u(x_t, y_t)
+\\
+&amp; = \max_{\substack{ \{x_{1}, y_{0}\} \text{ s.t.} \\  x_{1} = g(x_0, y_0) \\ x_0 \text{ given} }}
+u(x_0, y_0) +
+\beta \left\{ \max_{\substack{ \{x_{t+1}, y_{t}\}_{t=1}^{\infty} \text{ s.t.} \\  x_{t+1} = g(x_t, y_t) \ \forall t \ge 1 \\ x_1 \text{ given}  }}
+\sum_{t=1}^{\infty} \beta^{t-1} u(x_t, y_t) \right\}
+\\
+&amp; = \max_{\substack{ \{x_{1}, y_{0}\} \text{ s.t.} \\  x_{1} = g(x_0, y_0) \\ x_0 \text{ given} }}
+u(x_0, y_0) +
+\beta  \underbrace{\left\{\max_{\substack{ \{x_{t+2}, y_{t+1}\}_{t=0}^{\infty} \text{ s.t.} \\  x_{t+2} = g(x_{t+1}, y_{t+1}) \ \forall t \ge 0 \\ x_1 \text{ given}  }} \sum_{t=0}^{\infty} \beta^t u(x_{t+1}, y_{t+1})  \right\}}_{V(x_1)}
+\end{align*}
+\tag{12}</span></span></p>
+<p>注意到此时由于我们的问题是无限期的，括号内的优化问题与原始问题因此完全相同，唯一的区别只在于初始状态 <span class="math inline">x</span> 不同，于是我们得到了最终的 Bellman equation：</p>
+<p><span id="eq-13"><span class="math display">
+\begin{align*}
+    V(x_0) = &amp;\max_{ \{x_{1}, y_{0}\} } u(x_0, y_0) + \beta V(x_1)
+    \\[1ex]
+    \text{s.t.} \quad &amp;\ x_{1} = g(x_0, y_0) \\
+    &amp;\ x_{1} \in X, \enspace y_0 \in Y \\
+    &amp;\ x_0 \ \text{is given}
+\end{align*}
+\tag{13}</span></span></p>
+<p>问题的平稳性进一步体现在：我们从任何一个时间点 <span class="math inline">t</span> 开始进行上述分析，我们都会得到和上面相同的结构：</p>
+<p><span id="eq-14"><span class="math display">
+\begin{align*}
+    V(x_t) = &amp;\max_{ \{x_{t+1}, y_{t}\} } u(x_t, y_t) + \beta V(x_{t+1})
+    \\[1ex]
+    \text{s.t.} \quad &amp;\ x_{t+1} = g(x_t, y_t) \\
+    &amp;\ x_{t+1} \in X, \enspace y_t \in Y \\
+    &amp;\ x_t \ \text{is given}
+\end{align*}
+\tag{14}</span></span></p>
+</section>
+<section id="hamiltonian" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Hamiltonian</h1>
+<p>…</p>
+</section>
+<section id="hjb-equation" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> HJB equation</h1>
+
+
+</section>
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>这里我们还隐含假设了最优解是内点解，经济学模型通常都会通过施加 Innada condition 来避免边角解的麻烦，否则我们需要将一阶条件写成 complementary slackness 的形式。<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,0 +1,64 @@
+---
+title: "Rubin因果模型：一个符号上的Tip"
+author: "Tu"
+date: "2025-09-15"
+categories: [metrics]
+---
+
+标准的 Rubin 潜在结果框架通常都使用 $Y_i(1)$ 和 $Y_i(0)$ 指示个体 $i$ 是/否接受了处置 $D_i$ 的潜在结果，这套符号虽然简洁，但在某些时候会造成一些困惑。[Bruce E. Hansen](https://users.ssc.wisc.edu/~bhansen/) 的 [Econometrics](https://users.ssc.wisc.edu/~bhansen/econometrics/) 教材提供了一套更为清晰的符号，使得 Rubin 潜在结果框架和经典的计量经济学之间的联系更为直接。
+
+具体而言，假设个体 $i$ 的结果 $Y_i$ 可以由如下的结构模型描述：
+
+$$
+ Y_i = h(D_i,U_i)
+$$ {#eq-01}
+
+其中 $D_i$ 与标准符号的含义相同，是代表个体是否接受处置的二元变量。$U_i$ 则代表了所有可能影响结果 $Y_i$ 的其他变量，在这里假设是一个 $\ell \times 1$ 的随机向量。$h(\cdot)$ 代表从 $(D_i,U_i)$ 到 $Y_i$ 的映射关系，但我们不需要对 $h(\cdot)$ 的函数形式做任何假设，因此 $h(\cdot)$ 在这里唯一的作用是假设这样的映射关系是存在的。
+
+在上述意义下 $Y_i(1)$ 实际上是 $h(1,U_i)$，$Y_i(0)$ 实际上是 $h(0,U_i)$，而个体 $i$ 的 **treament effect** 则是：
+
+$$
+ TE(U_i) = Y_i(1) - Y_i(0) = h(1,U_i) - h(0,U_i)
+$$ {#eq-02}
+
+即在控制所有其他影响因素 $U_i$ 不变的情况下，改变 $D_i$ 导致的结果差异。
+
+注意到，由于我们目前只在**总体**层面考虑问题，因此我们可以去掉下标 $i$：
+
+$$
+ Y = h(D,U)
+$$ {#eq-03}
+
+于是 **average treatment effect** (ATE) 实际上是：
+
+$$
+ \mathbb{E}[TE(U)] = \int_{\mathbb{R}^{\ell}} TE(u) f(u)du = \int_{\mathbb{R}^{\ell}} (h(1,u) - h(0,u))f(u)du
+$$ {#eq-04}
+
+问题的关键在于，通过 $Y$ 对 $D$ 回归得到的系数：
+
+$$
+ \mathbb{E}[Y|D=1] - \mathbb{E}[Y|D=0] = \int_{\mathbb{R}^{\ell}} h(1,u)f(u|D=1)du - \int_{\mathbb{R}^{\ell}} h(0,u)f(u|D=0)du
+$$ {#eq-05}
+
+是否等于 ATE ？
+
+不难看出当 $D$ 统计独立于 $U$ 时，即当 $f(u|D=1) = f(u|D=0) = f(u)$ 时两者相等。这实际上就是要求接受处置与否是随机分配的，我们无法从个体是否接受了处置这一信息推断出该个体的其他特征。并且注意到，在上述仅包含 **dummy** 的回归中， $Y$ 关于 $D$ 的条件期望函数就是线性的，也即在这种特殊情况下，我们的线性条件期望函数是正确设定的。
+
+::: {.callout-tip appearance="default"}
+## 如果 $D$ 是 dummy，那么 $\mathbb{E}[Y|D] = \alpha + \beta D$
+
+由于 $D$ 的取值只有0和1，显然有：
+
+$$
+\mathbb{E}[Y|D] = \mathbb{E}[Y|D=0] + (\mathbb{E}[Y|D=1] - \mathbb{E}[Y|D=0])D
+$$
+
+此时 $\alpha = \mathbb{E}[Y|D=0]$，$\beta = \mathbb{E}[Y|D=1] - \mathbb{E}[Y|D=0]$。
+:::
+
+通常我们还会区分所谓的 **average treatment effect on the treated** (ATET) 以及 **average treatment effect on the untreated** (ATEU)，在当前符号下，我们很容易看出当随机分配满足，即 $D$ 独立于 $U$ 时，ATE = ATET = ATEU，因为：
+
+$$
+\mathbb{E}[TE(U)|D=1] = \mathbb{E}[TE(U)|D=0] = \mathbb{E}[TE(U)]
+$$ {#eq-06}

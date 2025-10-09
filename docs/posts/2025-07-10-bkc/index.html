@@ -238,10 +238,24 @@ y_{t} = \phi \mathbb{E}_t[y_{t+1}]
 y_{t} = \phi \mathbb{E}_t[y_{t+1}] + x_t
 \tag{5}</span></span></p>
 <p><span class="math inline">x_t</span> 一般假设服从一个AR(1)过程：</p>
-<p><span id="eq-05"><span class="math display">
+<p><span id="eq-06"><span class="math display">
 x_{t} = \rho x_{t-1} + u_{t}
 \tag{6}</span></span></p>
-<p>与之前的论证类似，此时方程存在唯一解的条件仍然是 <span class="math inline">\phi &lt; 1</span>（<span class="math inline">\lambda &gt; 1</span>），但知道了模型具有唯一解后，这个解应当具有什么样的形式？这里的关键在于，现在我们模型潜在的那个概率空间正是由我们外生的随机过程 <span class="math inline">\{x_t\}_{t=0}^{\infty}</span> 所定义，因此最终我们的解 <span class="math inline">y_t</span> 将会是 <span class="math inline">x_t</span> 的函数，又由于模型的线性，最终解的形式一定是 <span class="math inline">y_t = \alpha x_t</span>，这正是为什么我们可以应用“猜测法”的原因。</p>
+<p>与之前的论证类似，此时方程存在唯一解的条件仍然是 <span class="math inline">\phi &lt; 1</span>（<span class="math inline">\lambda &gt; 1</span>），但知道了模型具有唯一解后，这个解应当具有什么样的形式？这里的关键在于，现在我们模型潜在的那个概率空间正是由我们外生的随机过程 <span class="math inline">\{x_t\}_{t=0}^{\infty}</span> 所定义，因此最终我们的解 <span class="math inline">y_t</span> 将会是 <span class="math inline">x_t</span> 的函数，又由于方程的线性性，最终解的形式一定是 <span class="math inline">y_t = \alpha x_t</span>，这正是为什么我们可以应用“猜测法”的原因。</p>
+<p>现在唯一的待定系数只剩下 <span class="math inline">\alpha</span>，让我们将 <span class="math inline">y_t = \alpha x_t</span> 带入 <a href="#eq05">(5)</a>：</p>
+<p><span id="eq-07"><span class="math display">
+\begin{align*}
+\alpha x_t &amp;= \phi \mathbb{E}_t[\alpha (\rho x_t + u_{t+1})] + x_t \\
+\alpha x_t &amp;= \phi \alpha \rho x_t + x_t \\
+\alpha x_t &amp;= (1 + \phi \rho \alpha) x_t
+\end{align*}
+\tag{7}</span></span></p>
+<p>由于上述等式需要对所有 <span class="math inline">x_t</span> 成立，因此有:</p>
+<p><span id="eq-08"><span class="math display">
+\alpha = 1 + \phi \rho \alpha
+\tag{8}</span></span></p>
+<p>解得 <span class="math inline">\alpha = \frac{1}{1 - \phi \rho}</span>。</p>
+<p>事实上，我们仍然可以使用之前的前向迭代法来验证我们的猜测法是否正确：</p>
 </section>
 <section id="二维情形" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> 二维情形</h1>
