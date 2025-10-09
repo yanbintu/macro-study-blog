@@ -333,7 +333,7 @@ u(x_1, y_1) +
 u(x_0, y_0) + \beta V_1(x_1)
 \end{align*}
 \tag{10}</span></span></p>
-<p>上面的推导过程完整地展示了我们如何将一个全局的最优化问题递归地分解为分步优化问题，并如何从最后一期开始倒向地逐步求解整个优化问题。在每一阶段的优化问题，我们都会得到一个行动指南：<span class="math inline">y_t = h_t(x_t)</span>，称为 policy function，它指示了我们如何根据当前的时间 <span class="math inline">t</span> 以及状态 <span class="math inline">x_t</span> 展开最优行动，因此与 sequence 方法直接得到的是一组序列不同，recursive 的方法得到的是一组函数，根据这组函数，我们再从第 0 期出发，就可以还原出最优的序列。</p>
+<p>上面的推导过程完整地展示了我们如何将一个全局的最优化问题递归地嵌套为一个个更小的优化子问题，并如何从最后一期开始倒向地逐步求解整个优化问题。对应每一阶段的优化子问题，我们都会得到一个最优行动指南：<span class="math inline">y_t = h_t(x_t)</span>，称为 policy function，它指示了我们如何根据当前的时间 <span class="math inline">t</span> 以及状态 <span class="math inline">x_t</span> 展开最优行动，因此与 sequence 方法直接得到的是一组序列不同，recursive 的方法得到的是一组函数，根据这组函数，我们再从第 0 期出发，就可以还原出最优的序列。</p>
 <p>最后值得额外说明的是，鉴于时间的特殊地位，我们依照惯例将时间 <span class="math inline">t</span> 记作下标，但 <span class="math inline">V_t(x_t)</span> 和 <span class="math inline">h_t(x_t)</span> 实际上是 <span class="math inline">V(t,x_t)</span> 和 <span class="math inline">h(t,x_t)</span>，即时间 <span class="math inline">t</span> 在这里实际是一个状态变量，即该优化问题是非平稳的。接下来我们将看到推广到无限期会将我们的问题变为平稳的，这也是为什么我们会偏爱一个看起来更难处理的无限期的技术原因。</p>
 <p>我们将典型的离散时间最优控制问题重写在下面：</p>
 <p><span id="eq-11"><span class="math display">
@@ -360,7 +360,7 @@ u(x_0, y_0) +
 \beta  \underbrace{\left\{\max_{\substack{ \{x_{t+2}, y_{t+1}\}_{t=0}^{\infty} \text{ s.t.} \\  x_{t+2} = g(x_{t+1}, y_{t+1}) \ \forall t \ge 0 \\ x_1 \text{ given}  }} \sum_{t=0}^{\infty} \beta^t u(x_{t+1}, y_{t+1})  \right\}}_{V(x_1)}
 \end{align*}
 \tag{12}</span></span></p>
-<p>注意到此时由于我们的问题是无限期的，括号内的优化问题与原始问题因此完全相同，唯一的区别只在于初始状态 <span class="math inline">x</span> 不同，于是我们得到了最终的 Bellman equation：</p>
+<p>注意到此时正是由于我们的问题是无限期的，括号内的优化问题与原始问题因此完全相同（没有下标 <span class="math inline">t</span>），唯一的区别只在于初始状态 <span class="math inline">x</span> 不同，于是我们得到了最终的 Bellman equation：</p>
 <p><span id="eq-13"><span class="math display">
 \begin{align*}
     V(x_0) = &amp;\max_{ \{x_{1}, y_{0}\} } u(x_0, y_0) + \beta V(x_1)
@@ -380,13 +380,21 @@ u(x_0, y_0) +
     &amp;\ x_t \ \text{is given}
 \end{align*}
 \tag{14}</span></span></p>
+<p>…</p>
 </section>
 <section id="hamiltonian" class="level1" data-number="3">
 <h1 data-number="3"><span class="header-section-number">3</span> Hamiltonian</h1>
-<p>…</p>
+<ul>
+<li><p>discrete time hamiltonian</p></li>
+<li><p>interior variational argument</p></li>
+</ul>
 </section>
 <section id="hjb-equation" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> HJB equation</h1>
+<ul>
+<li><p>heuristic derived from bellman equation</p></li>
+<li><p>directly derived</p></li>
+</ul>
 
 
 </section>
