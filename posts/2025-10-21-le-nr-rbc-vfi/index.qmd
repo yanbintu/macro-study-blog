@@ -1,0 +1,387 @@
+---
+title: "Low-Efficiency and Non-Robust RBC VFI"
+author: "Tu"
+date: "2025-10-21"
+categories: [macro, code, replication]
+execute:
+  enabled: true
+  cache: true
+---
+
+这是一份低效率的、非稳健的使用值函数迭代求解标准 RBC 模型的非 python 风格的 python 代码。
+
+我们考虑的是下面的 social planner problem：
+$$
+\begin{align*}
+    &\mathbb{E}_0 \sum_{t=0}^{\infty} \beta^t \left[ \frac{(C_t^\nu (1-L_t)^{1-\nu})^{1-\gamma}}{1-\gamma} \right] \\[1ex]
+    \text{s.t.} \quad &C_t + K_{t+1} = e^{Z_t} K_t^\alpha L_t^{1-\alpha} + (1-\delta)K_t \\
+    &Z_t = \lambda Z_{t-1} + \epsilon_t\\
+    &K_0,\ Z_0 \ \text{are given}
+\end{align*}
+$$ {#eq-01}
+
+Bellman equation:
+
+$$
+\begin{align*}
+V(K_t, Z_t) = \max_{C_t, L_t} \left\{ \frac{(C_t^\nu (1-L_t)^{1-\nu})^{1-\gamma}}{1-\gamma} + \beta \mathbb{E}_t V(e^{Z_t} K_t^\alpha L_t^{1-\alpha} + (1-\delta)K_t - C_t, Z_{t+1}) \right\}
+\end{align*}
+$$ {#eq-02}
+
+接下来我们使用值函数迭代的方法来求解 $V(K, Z)$：
+```{python}
+#| warning: false
+
+# %%
+import numpy as np
+import types
+from quantecon.markov import tauchen
+from scipy.interpolate import interp1d
+from scipy.optimize import minimize
+import time
+import matplotlib.pyplot as plt
+
+# %%
+#----------------------------------------------------------------
+# 1. Calibration: Parameters and Steady States
+#----------------------------------------------------------------
+P = types.SimpleNamespace() # Parameters
+SS = types.SimpleNamespace() # Steady states
+G = types.SimpleNamespace()  # Grids
+
+# Technology
+P.aalpha = 0.3
+P.bbeta  = 0.991
+P.ddelta = 0.0196
+
+# Preference parameters
+P.ggamma = 5
+
+# Productivity shocks
+P.llambda = 0.95
+P.ssigma  = 0.007
+
+# Compute Steady State values
+SS.lss = 1/3
+SS.kss = ((1-P.bbeta*(1-P.ddelta))/(P.aalpha*P.bbeta))**(1/(P.aalpha-1)) * SS.lss
+SS.css = (SS.kss**P.aalpha)*(SS.lss**(1-P.aalpha)) - P.ddelta*SS.kss
+P.nnu  = SS.css/((1-P.aalpha)*SS.kss**P.aalpha*SS.lss**(-P.aalpha)*(1-SS.lss)+SS.css)
+SS.vss = ((SS.css**P.nnu*(1-SS.lss)**(1-P.nnu))**(1-P.ggamma))/(1-P.ggamma)/(1-P.bbeta)
+
+# %%
+#----------------------------------------------------------------
+# 1a. Define utility function and production function
+#----------------------------------------------------------------
+
+def u(c, l):
+
+    return ((c**P.nnu)*(1-l)**(1-P.nnu))**(1-P.ggamma)/(1-P.ggamma)
+
+def f(k, l, z):
+
+    return np.exp(z) * (k**P.aalpha) * (l**(1-P.aalpha))
+
+# %%
+#----------------------------------------------------------------
+# 2. Declare size vectors for grids
+#----------------------------------------------------------------
+
+# Define boundaries for capital
+# consider the state space of 90% to 190% capital
+pRange_k_grid = 0.9;        
+G.k_min = (1-pRange_k_grid)*SS.kss
+G.k_max = (1+pRange_k_grid)*SS.kss
+G.k_pts = 41
+
+G.k_grid  = np.linspace(G.k_min,G.k_max,G.k_pts)
+G.k_dim = len(G.k_grid)
+
+# Productivity
+G.z_dim = 5    # number of nodes for technology process Z
+
+# %%
+#----------------------------------------------------------------
+# 3. Tauchen 
+#----------------------------------------------------------------
+
+# find grid points and transition matrix using Tauchen's method
+mc = tauchen(G.z_dim, P.llambda, P.ssigma, mu=0)
+G.Z = mc.state_values
+G.PI = mc.P
+
+# size of state grids (the structure of solutions)
+G.s_grid = np.ones((G.k_dim, G.z_dim))
+
+# initialize guess solution for value function
+v_guess = np.ones_like(G.s_grid)
+
+# storage for value function and policy function
+maxIteration = 2000
+v_history = np.zeros((maxIteration, G.k_dim, G.z_dim))
+c_policy_history = np.zeros((maxIteration, G.k_dim, G.z_dim))
+l_policy_history = np.zeros((maxIteration, G.k_dim, G.z_dim))
+
+# %%
+#----------------------------------------------------------------
+# 3a. Define functions for value function iteration
+#----------------------------------------------------------------
+
+# expected value function of k_prime
+def create_expected_value_interpolator(z_index, v_old):
+    """
+    This is a factory function.
+    Its job is to create and return a callable function that computes the expected value.
+
+    Parameters:
+    z_index (int): The index of the current technology state z.
+    v_old (np.ndarray): The complete (k_dim, z_dim) value function array.
+    G: An object containing grids and the transition matrix.
+
+    Returns:
+    callable: A function that takes only k_prime as an argument.
+    """
+
+    # 1. One-time setup: create 5 one-dimensional interpolation function objects.
+    #    We store these 5 functions in a list.
+    interpolators = []
+    for j in range(G.z_dim):
+        v_k_given_z_j = v_old[:, j]
+        # Create and store the callable interp1d function object
+        f_interp = interp1d(G.k_grid, v_k_given_z_j,
+                              kind='cubic',
+                              bounds_error = False,
+                              fill_value= "extrapolate") 
+        interpolators.append(f_interp)
+
+    # 2. Get the one-time transition probabilities
+    transition_probs = G.PI[z_index, :]
+
+    # 3. Define and return the inner function (this is the callable object we need)
+    def expected_value_func(k_prime):
+        """
+        This function calculates E[V(k', z') | z].
+        It can access 'interpolators' and 'transition_probs' defined in its outer scope.
+        This is a "closure".
+        """
+        future_values = np.array([interp(k_prime) for interp in interpolators])
+        return np.dot(transition_probs, future_values)
+
+    # The factory function returns this inner function
+    return expected_value_func
+
+# right hand side of Bellman equation
+def bellman_rhs_for_optimizer(controls, states, expected_value_func):
+
+    c, l = controls
+    k, z = states
+    k_prime = f(k, l, z) + (1 - P.ddelta) * k - c
+    return u(c, l) + P.bbeta * expected_value_func(k_prime)
+
+# Bellman operator
+def T(v_old):
+
+    v_new = np.zeros_like(v_old)
+    c_policy = np.zeros_like(v_old)
+    l_policy = np.zeros_like(v_old)
+
+    expected_value_funcs = []
+    for j in range(G.z_dim):
+        expected_value_funcs.append(create_expected_value_interpolator(j, v_old))
+
+    for k_index, k_val in enumerate(G.k_grid):
+        for z_index, z_val in enumerate(G.Z):
+
+            states = (k_val, z_val)
+
+            # Bounds: C > 0, 0 <= L <= 1
+            bounds = [(1e-10, None), (1e-10, 1.0 - 1e-10)]
+
+            # Inequality Constraint: C <= f(k,l,z) + (1-δ)k
+            def inequality_constraint(controls, k, z):
+                c, l = controls
+                resources = f(k, l, z) + (1 - P.ddelta) * k
+                return resources - c
+
+            # Package the constraint into the dictionary format required by scipy
+            constraints = [{
+                'type': 'ineq',  # 'ineq' stands for an inequality constraint (>= 0)
+                'fun': inequality_constraint,
+                'args': (k_val, z_val) # Pass the current states k, z as extra arguments
+            }]
+
+           # Use a safe, guaranteed feasible guess
+            available_resources = f(k_val, SS.lss, z_val) + (1 - P.ddelta) * k_val
+            c_guess = 0.5 * available_resources
+            l_guess = SS.lss
+            initial_guess = [c_guess, l_guess]
+
+            # Define the optimization objective function
+            objective_func = lambda controls: -bellman_rhs_for_optimizer(controls, states, expected_value_funcs[z_index])
+
+            # Call the minimize function
+            result = minimize(
+                fun=objective_func,
+                x0=initial_guess,
+                args=(),  # objective_func is a lambda closure, no extra args needed
+                method='SLSQP',
+                bounds=bounds,
+                constraints=constraints
+            )
+
+            # Save the results
+            if result.success:
+                v_new[k_index, z_index] = -result.fun
+                c_policy[k_index, z_index] = result.x[0]
+                l_policy[k_index, z_index] = result.x[1]
+            else:
+                # If optimization fails, we can set a flag value and print a warning
+                v_new[k_index, z_index] = -1e10 # or other penalty value
+                print(f"Warning: Optimization failed at (k={k_val:.2f}, z={z_val:.2f}): {result.message}")
+
+    return v_new, c_policy, l_policy
+
+# %%
+#----------------------------------------------------------------
+# 4. Iteration
+#----------------------------------------------------------------
+
+tol = 1e-4
+error = tol + 1
+v_old = v_guess
+
+i = 0
+while error > tol and i < maxIteration:
+
+    v_new, c_policy, l_policy = T(v_old)
+    error = np.max(np.abs(v_new - v_old))
+
+    v_history[i] = v_new
+    c_policy_history[i] = c_policy
+    l_policy_history[i] = l_policy
+
+    i = i + 1
+    v_old = v_new
+    if i % 100 == 0:
+        print(f"Error at iteration {i} is {error}.")
+
+if error > tol:
+    print("Failed to converge!")
+else:
+    print(f"\nConverged in {i} iterations.")
+
+```
+
+Value function 迭代可视化：
+
+```{python}
+
+# %%
+# value function
+
+z_steady_state_index = 2
+start = 0   # 任意整数起点
+step = 2  # 步长
+count = 50  # 前进次数
+
+fig, ax = plt.subplots(figsize=(6, 4))
+
+ax.plot(G.k_grid, v_history[0, :, z_steady_state_index], color=plt.cm.jet(0), label='First iteration')
+for j in range(start, start + step * count, step):
+
+    v_function_slice = v_history[j, :, z_steady_state_index]
+
+    ax.plot(G.k_grid, v_function_slice, color=plt.cm.jet((j-start)/(step*count)))
+
+ax.set_title(fr'Value function history (z = {G.Z[z_steady_state_index]:.2f})')
+ax.set_xlabel('K')
+ax.legend()
+plt.show()
+
+```
+
+消费的 policy function 迭代可视化：
+
+```{python}
+
+# %%
+# policy function for consumption
+
+z_steady_state_index = 2
+start = 10   # 任意整数起点
+step = 1  # 步长
+count = 50  # 前进次数
+
+fig, ax = plt.subplots(figsize=(6, 4))
+
+for j in range(start, start + step * count, step):
+
+    c_function_slice = c_policy_history[j, :, z_steady_state_index]
+
+    ax.plot(G.k_grid, c_function_slice, color=plt.cm.jet((j-start)/(step*count)))
+
+ax.set_title(fr'Policy function of C (z = {G.Z[z_steady_state_index]:.2f})')
+ax.set_xlabel('K')
+plt.show()
+
+```
+
+劳动的 policy function 迭代可视化：
+
+```{python}
+
+# %%
+# policy function for labor
+
+z_steady_state_index = 2
+start = 10   # 任意整数起点
+step = 1  # 步长
+count = 50  # 前进次数
+
+fig, ax = plt.subplots(figsize=(6, 4))
+
+for j in range(start, start + step * count, step):
+
+    l_function_slice = l_policy_history[j, :, z_steady_state_index]
+
+    ax.plot(G.k_grid, l_function_slice, color=plt.cm.jet((j-start)/(step*count)))
+
+ax.set_title(fr'Policy function of L (z = {G.Z[z_steady_state_index]:.2f})')
+ax.set_xlabel('K')
+plt.show()
+
+```
+
+最终的消费的解：
+
+```{python}
+# %%
+fig, ax = plt.subplots(figsize=(6, 4))
+
+for j in range(0, G.z_dim):
+
+    c_function_slice = c_policy_history[i-1, :, j]
+    ax.plot(G.k_grid, c_function_slice, label=fr'z={G.Z[j]:.2f}')
+
+ax.set_title('Policy function of C after convergence(tol=1e-4)')
+ax.set_xlabel('K')
+ax.legend()
+plt.show()
+
+```
+
+最终的劳动的解：
+```{python}
+# %%
+fig, ax = plt.subplots(figsize=(6, 4))
+
+for j in range(0, G.z_dim):
+
+    l_function_slice = l_policy_history[i-1, :, j]
+    ax.plot(G.k_grid, l_function_slice, label=fr'z={G.Z[j]:.2f}')
+
+ax.set_title('Policy function of L after convergence(tol=1e-4)')
+ax.set_xlabel('K')
+ax.legend()
+plt.show()
+
+```

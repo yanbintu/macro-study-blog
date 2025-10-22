@@ -155,7 +155,7 @@ window.Quarto = {
 <body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+  <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -186,50 +186,49 @@ window.Quarto = {
     </nav>
 </header>
 <!-- content -->
-<header id="title-block-header" class="quarto-title-block default page-columns page-full">
-  <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-body">
-      <h1 class="title">Phase Diagram</h1>
-                                <div class="quarto-categories">
-                <div class="quarto-category">macro</div>
-                <div class="quarto-category">code</div>
-                <div class="quarto-category">visualization</div>
-              </div>
-                  </div>
-  </div>
-    
-  
-  <div class="quarto-title-meta">
-
-      <div>
-      <div class="quarto-title-meta-heading">Author</div>
-      <div class="quarto-title-meta-contents">
-               <p>Tu </p>
-            </div>
-    </div>
-      
-      <div>
-      <div class="quarto-title-meta-heading">Published</div>
-      <div class="quarto-title-meta-contents">
-        <p class="date">September 4, 2025</p>
-      </div>
-    </div>
-    
-      
-    </div>
-    
-  
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
         
     </div>
 <!-- main -->
-<main class="content quarto-banner-title-block" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Phase Diagram</h1>
+  <div class="quarto-categories">
+    <div class="quarto-category">macro</div>
+    <div class="quarto-category">code</div>
+    <div class="quarto-category">visualization</div>
+  </div>
+  </div>
 
 
 
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Tu </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 4, 2025</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
 
 
 <p>Phase diagram 是用来可视化系统随时间演化的绝佳手段，这里我们通过可视化经济学经典的RCK模型来说明 phase diagram 的含义。</p>
@@ -244,7 +243,7 @@ window.Quarto = {
 \tag{1}</span></span></p>
 <p>这个两变量的一阶微分方程组实际上定义了一个从 <span class="math inline">\mathbb{R}_+^2</span> 到 <span class="math inline">\mathbb{R}^2</span> 的映射，即给定任意的 <span class="math inline">(k, c)\in\mathbb{R}_+^2</span>， 对应于一个新的向量 <span class="math inline">(\dot{k},\dot{c})\in\mathbb{R}^2</span>。 从几何的角度来看，这正是一个向量场：想象每一个二维平面正象限的点上都附着了一个新的向量，这个向量正好是 <span class="math inline">k(t)</span> 和 <span class="math inline">c(t)</span> 对时间的导数，因此这个向量的方向决定了这个点当前运动的方向，这个向量的大小决定了这个点运动速度的大小。</p>
 <p>我们使用<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.quiver.html#matplotlib.axes.Axes.quiver"><code>quiver()</code></a>将这一向量场在 <span class="math inline">(k, c)</span> 所在的二维平面上可视化出来：</p>
-<div id="ae3a4089" class="cell">
+<div id="a52d6ddd" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
@@ -384,7 +383,7 @@ window.Quarto = {
 </div>
 <p><img src="rck_quiver.png" class="img-fluid"></p>
 <p>想象我们向这个二维平面中抛入一个小球，图中的每一个箭头都指示了如果小球到达该位置时，这个小球接下来将会如何运动。当小球按照箭头连续地运动起来，它的的运动轨迹便构成了流线，我们使用<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.streamplot.html#matplotlib.axes.Axes.streamplot"><code>streamplot()</code></a>将这些流线可视化：</p>
-<div id="8190d0a8" class="cell">
+<div id="56514708" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
@@ -444,7 +443,7 @@ window.Quarto = {
 </div>
 <p><img src="rck_stream.png" class="img-fluid"></p>
 <p>直观感受，此时的二维平面像是充满了流动的液体，其流动的规则由我们的微分方程组描述。进一步，想象我们向其中抛入一堆小球，让我们用<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.animation.FuncAnimation.html#matplotlib.animation.FuncAnimation"><code>FuncAnimation()</code></a>将这些小球的运动可视化：</p>
-<div id="b91d103d" class="cell">
+<div id="652e9850" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># %%</span></span>
